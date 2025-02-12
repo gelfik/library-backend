@@ -131,3 +131,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Auth settings
 AUTH_USER_MODEL = "accounts.User"
+
+# REST Framework
+
+REST_FRAMEWORK = {
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 20,
+    "MAX_PAGE_SIZE": 100,
+}
