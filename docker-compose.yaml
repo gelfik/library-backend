@@ -1,0 +1,42 @@
+name: django-app
+
+volumes:
+  storage:
+
+networks:
+  app_network:
+
+services:
+  web_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: web_app
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    env_file:
+      - .env
+    depends_on:
+      - storage_app
+    networks:
+      - app_network
+    volumes:
+      - .:/home/daemon/backend
+    command: "python3 manage.py runserver 0.0.0.0:8000"
+
+  storage_app:
+    image: mysql:8.0
+    container_name: storage_app
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: $STORAGE_ROOT_PASSWORD
+      MYSQL_DATABASE: $STORAGE_DATABASE
+      MYSQL_USER: $STORAGE_USER
+      MYSQL_PASSWORD: $STORAGE_PASSWORD
+    volumes:
+      - storage:/var/lib/mysql
+    networks:
+      - app_network
+    env_file:
+      - .env
